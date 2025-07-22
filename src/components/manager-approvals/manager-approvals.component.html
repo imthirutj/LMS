@@ -1,152 +1,243 @@
-<div class="container mt-4">
-  <div class="row align-items-center mb-4">
-    <div class="col-md-8">
-      <h2>Pending Approvals</h2>
-    </div>
-    <div class="col-md-4 d-flex justify-content-md-end">
-      <button class="btn btn-secondary" (click)="goBack()">← Back to Dashboard</button>
-    </div>
-  </div>
-
-  <ul class="nav nav-tabs mb-4">
-    <li class="nav-item">
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'leave'"
-        (click)="activeTab = 'leave'">
-        Leave Requests <span class="badge bg-secondary">{{pendingLeaveRequests.length}}</span>
-      </button>
-    </li>
-    <li class="nav-item">
-      <button
-        class="nav-link"
-        [class.active]="activeTab === 'encashment'"
-        (click)="activeTab = 'encashment'">
-        Encashment Requests <span class="badge bg-secondary">{{pendingEncashmentRequests.length}}</span>
-      </button>
-    </li>
-  </ul>
-
-  <div class="tab-content">
-    <!-- Leave Requests Tab -->
-    <div *ngIf="activeTab === 'leave'" class="requests-section tab-pane fade show active">
-      <div *ngIf="pendingLeaveRequests.length === 0" class="no-requests alert alert-info text-center">
-        <p class="mb-0">No pending leave requests</p>
+<div class="container-fluid py-4">
+  <div class="container">
+    <!-- Header -->
+    <div class="row align-items-center mb-5">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold text-white mb-2">
+          <i class="fas fa-tasks me-3"></i>Pending Approvals
+        </h1>
+        <p class="lead text-white-50">Review and approve team leave requests</p>
       </div>
-
-      <div *ngFor="let request of pendingLeaveRequests" class="request-card card mb-3">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <h3 class="card-title mb-0">{{request.employeeName}}</h3>
-          <div class="request-meta d-flex gap-2 align-items-center">
-            <span class="badge bg-light text-dark">{{request.leaveType}}</span>
-            <span class="badge bg-light text-dark fw-bold">{{request.totalDays}} days</span>
-          </div>
-        </div>
-
-        <div class="card-body">
-          <div class="mb-2">
-            <strong>Period:</strong>
-            {{request.startDate | date:'dd MMM yyyy'}} to {{request.endDate | date:'dd MMM yyyy'}}
-          </div>
-          <div class="mb-2">
-            <strong>Applied on:</strong> {{request.appliedDate | date:'dd MMM yyyy, HH:mm'}}
-          </div>
-          <div class="mb-2">
-            <strong>Reason:</strong> {{request.reason}}
-          </div>
-        </div>
-
-        <div class="card-footer bg-light">
-          <div class="mb-3">
-            <label for="managerComments" class="form-label">Manager Comments:</label>
-            <textarea
-              id="managerComments"
-              [(ngModel)]="request.tempComments"
-              placeholder="Add your comments (optional)..."
-              rows="2"
-              class="form-control"></textarea>
-          </div>
-
-          <div class="d-flex justify-content-end gap-2">
-            <button
-              class="btn btn-success btn-sm"
-              (click)="approveLeave(request)">
-              ✓ Approve
-            </button>
-            <button
-              class="btn btn-danger btn-sm"
-              (click)="rejectLeave(request)">
-              ✗ Reject
-            </button>
-          </div>
-        </div>
+      <div class="col-md-4 text-md-end">
+        <button class="btn btn-light btn-lg" (click)="goBack()">
+          <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+        </button>
       </div>
     </div>
 
-    <!-- Encashment Requests Tab -->
-    <div *ngIf="activeTab === 'encashment'" class="requests-section tab-pane fade show active">
-      <div *ngIf="pendingEncashmentRequests.length === 0" class="no-requests alert alert-info text-center">
-        <p class="mb-0">No pending encashment requests</p>
-      </div>
-
-      <div *ngFor="let request of pendingEncashmentRequests" class="request-card card mb-3">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <h3 class="card-title mb-0">{{request.employeeName}}</h3>
-          <div class="request-meta d-flex gap-2 align-items-center">
-            <span class="badge bg-light text-dark">{{request.leaveType}} Encashment</span>
-            <span class="badge bg-light text-dark fw-bold">{{request.daysToEncash}} days</span>
-          </div>
-        </div>
-
-        <div class="card-body">
-          <div class="mb-2">
-            <strong>Leave Type:</strong> {{request.leaveType}}
-          </div>
-          <div class="mb-2">
-            <strong>Days to Encash:</strong> {{request.daysToEncash}}
-          </div>
-          <div class="mb-2">
-            <strong>Estimated Amount:</strong> ₹{{request.amount | number}}
-          </div>
-          <div class="mb-2">
-            <strong>Applied on:</strong> {{request.appliedDate | date:'dd MMM yyyy, HH:mm'}}
-          </div>
-        </div>
-
-        <div class="card-footer bg-light">
-          <div class="d-flex justify-content-end gap-2">
-            <button
-              class="btn btn-success btn-sm"
-              (click)="approveEncashment(request)">
-              ✓ Approve
-            </button>
-            <button
-              class="btn btn-danger btn-sm"
-              (click)="rejectEncashment(request)">
-              ✗ Reject
-            </button>
-          </div>
+    <div class="fade-in-up">
+      <!-- Navigation Tabs -->
+      <div class="card border-0 shadow-lg mb-4">
+        <div class="card-body p-0">
+          <ul class="nav nav-tabs nav-fill border-0">
+            <li class="nav-item">
+              <button
+                class="nav-link py-4 px-4 border-0"
+                [class.active]="activeTab === 'leave'"
+                (click)="activeTab = 'leave'">
+                <i class="fas fa-calendar-alt me-2"></i>
+                Leave Requests 
+                <span class="badge bg-primary ms-2">{{pendingLeaveRequests.length}}</span>
+              </button>
+            </li>
+            <li class="nav-item">
+              <button
+                class="nav-link py-4 px-4 border-0"
+                [class.active]="activeTab === 'encashment'"
+                (click)="activeTab = 'encashment'">
+                <i class="fas fa-money-bill-wave me-2"></i>
+                Encashment Requests 
+                <span class="badge bg-success ms-2">{{pendingEncashmentRequests.length}}</span>
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Approval History -->
-  <div class="history-section card p-4 mt-4">
-    <div class="card-body">
-      <h3 class="card-title">Recent Approvals</h3>
-      <div class="history-list mt-3">
-        <div *ngFor="let request of recentApprovals" class="history-item d-flex justify-content-between align-items-center py-2 border-bottom">
-          <div class="history-info">
-            <strong>{{request.employeeName}}</strong> - {{request.leaveType}}
-            <span class="history-status badge" [ngClass]="{'bg-success': request.status === 'approved', 'bg-danger': request.status === 'rejected'}">{{request.status}}</span>
+      <div class="tab-content">
+        <!-- Leave Requests Tab -->
+        <div *ngIf="activeTab === 'leave'" class="requests-section">
+          <div *ngIf="pendingLeaveRequests.length === 0" class="card border-0 shadow-lg">
+            <div class="card-body text-center py-5">
+              <i class="fas fa-inbox text-muted fs-1 mb-3"></i>
+              <h4 class="text-muted">No pending leave requests</h4>
+              <p class="text-muted mb-0">All caught up! No leave requests require your attention.</p>
+            </div>
           </div>
-          <div class="history-date text-muted">
-            {{request.approvedDate | date:'dd MMM yyyy'}}
+
+          <div *ngFor="let request of pendingLeaveRequests" class="card border-0 shadow-lg mb-4">
+            <div class="card-header bg-gradient text-white py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h3 class="card-title mb-1">
+                    <i class="fas fa-user me-2"></i>{{request.employeeName}}
+                  </h3>
+                  <small class="text-white-50">Applied on {{request.appliedDate | date:'dd MMM yyyy, HH:mm'}}</small>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                  <span class="badge bg-white text-primary fs-6">{{request.leaveType}}</span>
+                  <span class="badge bg-warning text-dark fs-6 fw-bold">{{request.totalDays}} days</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body p-4">
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-calendar-day text-primary me-3"></i>
+                    <div>
+                      <small class="text-muted d-block">Period</small>
+                      <strong>{{request.startDate | date:'dd MMM yyyy'}} to {{request.endDate | date:'dd MMM yyyy'}}</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-clock text-info me-3"></i>
+                    <div>
+                      <small class="text-muted d-block">Duration</small>
+                      <strong>{{request.totalDays}} days</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-4">
+                <div class="d-flex align-items-start">
+                  <i class="fas fa-comment text-warning me-3 mt-1"></i>
+                  <div class="flex-grow-1">
+                    <small class="text-muted d-block">Reason</small>
+                    <p class="mb-0">{{request.reason}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer bg-light p-4">
+              <div class="mb-3">
+                <label for="managerComments" class="form-label">
+                  <i class="fas fa-pen me-2"></i>Manager Comments
+                </label>
+                <textarea
+                  id="managerComments"
+                  [(ngModel)]="request.tempComments"
+                  placeholder="Add your comments (optional)..."
+                  rows="3"
+                  class="form-control"></textarea>
+              </div>
+
+              <div class="d-flex justify-content-end gap-3">
+                <button
+                  class="btn btn-success btn-lg px-4"
+                  (click)="approveLeave(request)">
+                  <i class="fas fa-check me-2"></i>Approve
+                </button>
+                <button
+                  class="btn btn-danger btn-lg px-4"
+                  (click)="rejectLeave(request)">
+                  <i class="fas fa-times me-2"></i>Reject
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-        <div *ngIf="recentApprovals.length === 0" class="text-center text-muted py-3">
-          No recent approvals found
+
+        <!-- Encashment Requests Tab -->
+        <div *ngIf="activeTab === 'encashment'" class="requests-section">
+          <div *ngIf="pendingEncashmentRequests.length === 0" class="card border-0 shadow-lg">
+            <div class="card-body text-center py-5">
+              <i class="fas fa-inbox text-muted fs-1 mb-3"></i>
+              <h4 class="text-muted">No pending encashment requests</h4>
+              <p class="text-muted mb-0">All caught up! No encashment requests require your attention.</p>
+            </div>
+          </div>
+
+          <div *ngFor="let request of pendingEncashmentRequests" class="card border-0 shadow-lg mb-4">
+            <div class="card-header bg-gradient text-white py-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h3 class="card-title mb-1">
+                    <i class="fas fa-user me-2"></i>{{request.employeeName}}
+                  </h3>
+                  <small class="text-white-50">Applied on {{request.appliedDate | date:'dd MMM yyyy, HH:mm'}}</small>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                  <span class="badge bg-white text-success fs-6">{{request.leaveType}} Encashment</span>
+                  <span class="badge bg-warning text-dark fs-6 fw-bold">{{request.daysToEncash}} days</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-body p-4">
+              <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-tag text-primary me-3"></i>
+                    <div>
+                      <small class="text-muted d-block">Leave Type</small>
+                      <strong>{{request.leaveType}}</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-calendar-day text-info me-3"></i>
+                    <div>
+                      <small class="text-muted d-block">Days to Encash</small>
+                      <strong>{{request.daysToEncash}} days</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-rupee-sign text-success me-3"></i>
+                    <div>
+                      <small class="text-muted d-block">Estimated Amount</small>
+                      <strong>₹{{request.amount | number}}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer bg-light p-4">
+              <div class="d-flex justify-content-end gap-3">
+                <button
+                  class="btn btn-success btn-lg px-4"
+                  (click)="approveEncashment(request)">
+                  <i class="fas fa-check me-2"></i>Approve
+                </button>
+                <button
+                  class="btn btn-danger btn-lg px-4"
+                  (click)="rejectEncashment(request)">
+                  <i class="fas fa-times me-2"></i>Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approval History -->
+      <div class="card border-0 shadow-lg mt-5">
+        <div class="card-header bg-light py-4">
+          <h3 class="card-title mb-0">
+            <i class="fas fa-history me-2 text-primary"></i>Recent Approvals
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          <div *ngFor="let request of recentApprovals" class="d-flex justify-content-between align-items-center py-3 border-bottom">
+            <div class="d-flex align-items-center">
+              <div class="icon-box bg-primary bg-opacity-10 text-primary me-3">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <h6 class="mb-1">{{request.employeeName}}</h6>
+                <small class="text-muted">{{request.leaveType}} - {{request.totalDays}} days</small>
+              </div>
+            </div>
+            <div class="text-end">
+              <span class="badge fs-6 mb-1" [ngClass]="{'bg-success': request.status === 'approved', 'bg-danger': request.status === 'rejected'}">
+                {{request.status | titlecase}}
+              </span>
+              <div class="text-muted small">{{request.approvedDate | date:'dd MMM yyyy'}}</div>
+            </div>
+          </div>
+          <div *ngIf="recentApprovals.length === 0" class="text-center py-4">
+            <i class="fas fa-inbox text-muted fs-1 mb-3 d-block"></i>
+            <p class="text-muted mb-0">No recent approvals found</p>
+          </div>
         </div>
       </div>
     </div>

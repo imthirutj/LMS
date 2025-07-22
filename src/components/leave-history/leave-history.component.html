@@ -1,0 +1,356 @@
+<div class="container-fluid py-4">
+  <div class="container">
+    <!-- Header -->
+    <div class="row align-items-center mb-5">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold text-white mb-2">
+          <i class="fas fa-history me-3"></i>Leave History
+        </h1>
+        <p class="lead text-white-50">Track and manage your leave applications</p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <button class="btn btn-light btn-lg me-3" (click)="exportToCSV()">
+          <i class="fas fa-download me-2"></i>Export CSV
+        </button>
+        <button class="btn btn-outline-light btn-lg" (click)="goBack()">
+          <i class="fas fa-arrow-left me-2"></i>Back
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="currentUser" class="fade-in-up">
+      <!-- Statistics Cards -->
+      <div class="row g-4 mb-5">
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-lg h-100 stats-card">
+            <div class="card-body text-center p-4">
+              <div class="icon-box bg-primary bg-opacity-10 text-primary mx-auto mb-3">
+                <i class="fas fa-list-alt fs-2"></i>
+              </div>
+              <h3 class="text-primary mb-1">{{stats.total}}</h3>
+              <p class="text-muted mb-0">Total Applications</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-lg h-100 stats-card">
+            <div class="card-body text-center p-4">
+              <div class="icon-box bg-success bg-opacity-10 text-success mx-auto mb-3">
+                <i class="fas fa-check-circle fs-2"></i>
+              </div>
+              <h3 class="text-success mb-1">{{stats.approved}}</h3>
+              <p class="text-muted mb-0">Approved</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-lg h-100 stats-card">
+            <div class="card-body text-center p-4">
+              <div class="icon-box bg-warning bg-opacity-10 text-warning mx-auto mb-3">
+                <i class="fas fa-clock fs-2"></i>
+              </div>
+              <h3 class="text-warning mb-1">{{stats.pending}}</h3>
+              <p class="text-muted mb-0">Pending</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card border-0 shadow-lg h-100 stats-card">
+            <div class="card-body text-center p-4">
+              <div class="icon-box bg-info bg-opacity-10 text-info mx-auto mb-3">
+                <i class="fas fa-calendar-check fs-2"></i>
+              </div>
+              <h3 class="text-info mb-1">{{stats.totalDaysUsed}}</h3>
+              <p class="text-muted mb-0">Days Used</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="card border-0 shadow-lg mb-4">
+        <div class="card-header bg-gradient text-white py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <h3 class="card-title mb-0">
+            <i class="fas fa-filter me-2"></i>Filter & Search
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label for="statusFilter" class="form-label">
+                <i class="fas fa-info-circle me-2 text-primary"></i>Status
+              </label>
+              <select id="statusFilter" [(ngModel)]="filters.status" (change)="onFilterChange()" class="form-select">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label for="leaveTypeFilter" class="form-label">
+                <i class="fas fa-tag me-2 text-primary"></i>Leave Type
+              </label>
+              <select id="leaveTypeFilter" [(ngModel)]="filters.leaveType" (change)="onFilterChange()" class="form-select">
+                <option value="">All Types</option>
+                <option value="CL">Casual Leave</option>
+                <option value="EL">Earned Leave</option>
+                <option value="ML">Medical Leave</option>
+                <option value="UEL">Unpaid Earned Leave</option>
+                <option *ngIf="currentUser.gender === 'female'" value="MATERNITY">Maternity Leave</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label for="yearFilter" class="form-label">
+                <i class="fas fa-calendar me-2 text-primary"></i>Year
+              </label>
+              <select id="yearFilter" [(ngModel)]="filters.year" (change)="onFilterChange()" class="form-select">
+                <option value="">All Years</option>
+                <option *ngFor="let year of availableYears" [value]="year">{{year}}</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label for="searchFilter" class="form-label">
+                <i class="fas fa-search me-2 text-primary"></i>Search
+              </label>
+              <input 
+                type="text" 
+                id="searchFilter"
+                [(ngModel)]="filters.searchTerm" 
+                (input)="onFilterChange()" 
+                placeholder="Search reason, type..."
+                class="form-control">
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 text-end">
+              <button class="btn btn-outline-secondary" (click)="clearFilters()">
+                <i class="fas fa-times me-2"></i>Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leave History Table -->
+      <div class="card border-0 shadow-xl">
+        <div class="card-header bg-light py-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="card-title mb-0">
+              <i class="fas fa-table me-2 text-primary"></i>Leave Applications
+            </h3>
+            <span class="badge bg-primary fs-6">{{filteredRequests.length}} records</span>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="px-4 py-3">
+                    <i class="fas fa-calendar me-2"></i>Applied Date
+                  </th>
+                  <th class="px-4 py-3">
+                    <i class="fas fa-tag me-2"></i>Type
+                  </th>
+                  <th class="px-4 py-3">
+                    <i class="fas fa-calendar-day me-2"></i>Period
+                  </th>
+                  <th class="px-4 py-3">
+                    <i class="fas fa-clock me-2"></i>Days
+                  </th>
+                  <th class="px-4 py-3">
+                    <i class="fas fa-info-circle me-2"></i>Status
+                  </th>
+                  <th class="px-4 py-3">
+                    <i class="fas fa-eye me-2"></i>Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let request of getPaginatedRequests()" class="border-bottom">
+                  <td class="px-4 py-3">
+                    <div class="d-flex align-items-center">
+                      <i class="fas fa-calendar-plus text-muted me-2"></i>
+                      <span>{{request.appliedDate | date:'dd MMM yyyy'}}</span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="d-flex align-items-center">
+                      <i [class]="getLeaveTypeIcon(request.leaveType)" class="text-primary me-2"></i>
+                      <div>
+                        <div class="fw-medium">{{getLeaveTypeName(request.leaveType)}}</div>
+                        <small class="text-muted">{{request.leaveType}}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="small">
+                      <div>{{request.startDate | date:'dd MMM yyyy'}}</div>
+                      <div class="text-muted">to {{request.endDate | date:'dd MMM yyyy'}}</div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3">
+                    <span class="badge bg-info fs-6">{{request.totalDays}} days</span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <span class="badge fs-6" [class]="getStatusBadgeClass(request.status)">
+                      {{request.status | titlecase}}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <button 
+                      class="btn btn-outline-primary btn-sm"
+                      (click)="viewDetails(request)">
+                      <i class="fas fa-eye me-1"></i>View
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="getPaginatedRequests().length === 0">
+                  <td colspan="6" class="text-center py-5">
+                    <i class="fas fa-inbox text-muted fs-1 mb-3 d-block"></i>
+                    <h5 class="text-muted">No leave applications found</h5>
+                    <p class="text-muted mb-0">Try adjusting your filters or apply for leave to see records here.</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="totalPages > 1" class="card-footer bg-light py-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">
+              Showing {{(currentPage - 1) * itemsPerPage + 1}} to {{Math.min(currentPage * itemsPerPage, filteredRequests.length)}} of {{filteredRequests.length}} entries
+            </div>
+            <nav>
+              <ul class="pagination mb-0">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button class="page-link" (click)="goToPage(currentPage - 1)">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                </li>
+                <li *ngFor="let page of getPageNumbers()" class="page-item" [class.active]="page === currentPage">
+                  <button class="page-link" (click)="goToPage(page)">{{page}}</button>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <button class="page-link" (click)="goToPage(currentPage + 1)">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Details Modal -->
+<div *ngIf="showDetails && selectedRequest" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-xl">
+      <div class="modal-header bg-gradient text-white py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <h4 class="modal-title mb-0">
+          <i class="fas fa-info-circle me-2"></i>Leave Application Details
+        </h4>
+        <button type="button" class="btn-close btn-close-white" (click)="closeDetails()"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card border-0 bg-light h-100">
+              <div class="card-body p-3">
+                <h6 class="card-title text-primary mb-3">
+                  <i class="fas fa-calendar-alt me-2"></i>Application Info
+                </h6>
+                <div class="mb-2">
+                  <small class="text-muted">Applied Date:</small>
+                  <div class="fw-medium">{{selectedRequest.appliedDate | date:'dd MMM yyyy, HH:mm'}}</div>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted">Leave Type:</small>
+                  <div class="fw-medium">
+                    <i [class]="getLeaveTypeIcon(selectedRequest.leaveType)" class="text-primary me-2"></i>
+                    {{getLeaveTypeName(selectedRequest.leaveType)}}
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted">Status:</small>
+                  <div>
+                    <span class="badge" [class]="getStatusBadgeClass(selectedRequest.status)">
+                      {{selectedRequest.status | titlecase}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card border-0 bg-light h-100">
+              <div class="card-body p-3">
+                <h6 class="card-title text-success mb-3">
+                  <i class="fas fa-calendar-day me-2"></i>Leave Period
+                </h6>
+                <div class="mb-2">
+                  <small class="text-muted">Start Date:</small>
+                  <div class="fw-medium">{{selectedRequest.startDate | date:'dd MMM yyyy'}}</div>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted">End Date:</small>
+                  <div class="fw-medium">{{selectedRequest.endDate | date:'dd MMM yyyy'}}</div>
+                </div>
+                <div class="mb-2">
+                  <small class="text-muted">Total Days:</small>
+                  <div>
+                    <span class="badge bg-info fs-6">{{selectedRequest.totalDays}} days</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="card border-0 bg-light">
+              <div class="card-body p-3">
+                <h6 class="card-title text-warning mb-3">
+                  <i class="fas fa-comment me-2"></i>Reason
+                </h6>
+                <p class="mb-0">{{selectedRequest.reason}}</p>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="selectedRequest.status !== 'pending'" class="col-12">
+            <div class="card border-0 bg-light">
+              <div class="card-body p-3">
+                <h6 class="card-title text-info mb-3">
+                  <i class="fas fa-user-check me-2"></i>Approval Details
+                </h6>
+                <div class="row">
+                  <div class="col-md-6">
+                    <small class="text-muted">Approved/Rejected By:</small>
+                    <div class="fw-medium">{{selectedRequest.approvedBy || 'System'}}</div>
+                  </div>
+                  <div class="col-md-6">
+                    <small class="text-muted">Date:</small>
+                    <div class="fw-medium">{{selectedRequest.approvedDate | date:'dd MMM yyyy, HH:mm'}}</div>
+                  </div>
+                  <div *ngIf="selectedRequest.comments" class="col-12 mt-2">
+                    <small class="text-muted">Comments:</small>
+                    <div class="fw-medium">{{selectedRequest.comments}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-light py-3">
+        <button type="button" class="btn btn-secondary" (click)="closeDetails()">
+          <i class="fas fa-times me-2"></i>Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

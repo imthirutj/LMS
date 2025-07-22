@@ -1,0 +1,152 @@
+<div class="leave-application-container container mt-4">
+  <div class="header d-flex justify-content-between align-items-center mb-4">
+    <h2>Apply for Leave</h2>
+    <button class="btn btn-secondary" (click)="goBack()">← Back to Dashboard</button>
+  </div>
+
+  <div *ngIf="currentUser" class="application-form card p-4 mb-4">
+    <form (ngSubmit)="onSubmit()" #leaveForm="ngForm">
+      <div class="form-group mb-3">
+        <label for="leaveType" class="form-label">Leave Type*</label>
+        <select
+          id="leaveType"
+          [(ngModel)]="formData.leaveType"
+          name="leaveType"
+          required
+          (change)="onLeaveTypeChange()"
+          class="form-select">
+          <option value="">Select Leave Type</option>
+          <option value="CL">Casual Leave (CL) - {{currentUser.leaveBalance.cl}} days available</option>
+          <option value="EL">Earned Leave (EL) - {{currentUser.leaveBalance.el}} days available</option>
+          <option value="ML">Medical Leave (ML) - {{currentUser.leaveBalance.ml}} days available</option>
+          <option value="UEL">Unpaid Earned Leave (UEL) - {{currentUser.leaveBalance.uel}} days available</option>
+          <option *ngIf="currentUser.gender === 'female'" value="MATERNITY">
+            Maternity Leave - {{currentUser.leaveBalance.maternityLeave}} days available
+          </option>
+        </select>
+      </div>
+
+      <div class="date-group row mb-3">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="startDate" class="form-label">Start Date*</label>
+            <input
+              type="date"
+              id="startDate"
+              [(ngModel)]="formData.startDate"
+              name="startDate"
+              required
+              [min]="minDate"
+              (change)="calculateDays()"
+              class="form-control">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="endDate" class="form-label">End Date*</label>
+            <input
+              type="date"
+              id="endDate"
+              [(ngModel)]="formData.endDate"
+              name="endDate"
+              required
+              [min]="formData.startDate"
+              (change)="calculateDays()"
+              class="form-control">
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="formData.startDate && formData.endDate" class="days-info alert alert-info mb-3">
+        <p class="mb-0"><strong>Total Days: {{totalDays}}</strong></p>
+        <p *ngIf="formData.leaveType === 'CL'" class="note text-muted mb-0">
+          Note: CL includes weekends. Maximum 10 consecutive days allowed.
+        </p>
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="reason" class="form-label">Reason*</label>
+        <textarea
+          id="reason"
+          [(ngModel)]="formData.reason"
+          name="reason"
+          required
+          rows="4"
+          placeholder="Please provide reason for leave..."
+          class="form-control"></textarea>
+      </div>
+
+      <div *ngIf="validationMessage" class="validation-message alert" [ngClass]="{'alert-danger': !canApply, 'alert-success': canApply}">
+        {{validationMessage}}
+      </div>
+
+      <div class="form-actions d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Reset</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!leaveForm.valid || !canApply">
+          Submit Application
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="leave-policy-info card p-4">
+    <div class="card-body">
+      <h3 class="card-title">Leave Policy Information</h3>
+      <div class="policy-grid row mt-3">
+        <div class="col-md-6 mb-3">
+          <div class="policy-item card h-100">
+            <div class="card-body">
+              <h4 class="card-title">Casual Leave (CL)</h4>
+              <ul>
+                <li>12 days per year</li>
+                <li>Maximum 10 consecutive days</li>
+                <li>Includes weekends</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="policy-item card h-100">
+             <div class="card-body">
+              <h4 class="card-title">Earned Leave (EL)</h4>
+              <ul>
+                <li>30 days per year</li>
+                <li>15 days first half, 15 days second half</li>
+                <li>Expires after 240 days</li>
+                <li>Eligible for encashment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="policy-item card h-100">
+             <div class="card-body">
+              <h4 class="card-title">Medical Leave (ML)</h4>
+              <ul>
+                <li>1 day per month</li>
+                <li>Can accumulate</li>
+                <li>Expires after 240 days</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="policy-item card h-100">
+             <div class="card-body">
+              <h4 class="card-title">Unpaid Earned Leave (UEL)</h4>
+              <ul>
+                <li>&lt;10 years service: 45 days</li>
+                <li>&gt;10 years service: 90 days</li>
+                <li>Eligible for encashment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

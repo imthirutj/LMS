@@ -1,0 +1,96 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h1>Leave Management System</h1>
+    <div class="user-switcher">
+      <label>Switch User: </label>
+      <select (change)="onUserChange($event)" class="form-select user-select">
+        <option *ngFor="let emp of employees" [value]="emp.id">
+          {{emp.name}} ({{emp.role}})
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="currentUser$ | async as user" class="main-content">
+    <div class="user-info alert alert-info">
+      <h2>Welcome, {{user.name}}</h2>
+      <p>Role: {{user.role | titlecase}} | Service Years: {{user.serviceYears}}</p>
+    </div>
+
+    <div class="leave-balance-card card">
+      <div class="card-body">
+        <h3 class="card-title">Leave Balance</h3>
+        <div class="balance-grid row">
+          <div class="col-md-6 mb-3">
+            <div class="balance-item alert alert-secondary">
+              <span class="label">Casual Leave (CL)</span>
+              <span class="value">{{user.leaveBalance.cl}} days</span>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="balance-item alert alert-secondary">
+              <span class="label">Earned Leave (EL)</span>
+              <span class="value">{{user.leaveBalance.el}} days</span>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="balance-item alert alert-secondary">
+              <span class="label">Medical Leave (ML)</span>
+              <span class="value">{{user.leaveBalance.ml}} days</span>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="balance-item alert alert-secondary">
+              <span class="label">Unpaid Earned Leave (UEL)</span>
+              <span class="value">{{user.leaveBalance.uel}} days</span>
+            </div>
+          </div>
+          <div *ngIf="user.gender === 'female' && user.leaveBalance.maternityLeave" class="col-md-6 mb-3">
+            <div class="balance-item alert alert-secondary">
+              <span class="label">Maternity Leave</span>
+              <span class="value">{{user.leaveBalance.maternityLeave}} days</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="navigation-cards row">
+      <div class="col-md-4 mb-3">
+        <div class="nav-card card" (click)="navigateTo('apply-leave')">
+          <div class="card-body">
+            <h3 class="card-title">Apply for Leave</h3>
+            <p class="card-text">Submit new leave requests</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-3">
+        <div class="nav-card card" (click)="navigateTo('leave-history')">
+          <div class="card-body">
+            <h3 class="card-title">Leave History</h3>
+            <p class="card-text">View your leave applications</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-3">
+        <div class="nav-card card" (click)="navigateTo('encashment')">
+          <div class="card-body">
+            <h3 class="card-title">Leave Encashment</h3>
+            <p class="card-text">Encash eligible leaves</p>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="user.role === 'manager'" class="col-md-4 mb-3">
+        <div class="nav-card card manager-card" (click)="navigateTo('approvals')">
+          <div class="card-body">
+            <h3 class="card-title">Pending Approvals</h3>
+            <p class="card-text">Review team leave requests</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

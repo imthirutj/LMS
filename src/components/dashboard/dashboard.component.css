@@ -1,40 +1,56 @@
 .nav-card {
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  border: none !important;
 }
 
 .nav-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important; /* Increased shadow on hover */
-  border-color: var(--primary-color); /* Use CSS variable for border color */
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
 }
 
 .manager-card {
-  background: linear-gradient(135deg, #a2b2ff 0%, #6371c7 100%); /* Adjusted gradient */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
-.manager-card .card-title,
-.manager-card .card-text {
-  color: white !important; /* Ensure text is white */
+.manager-card:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
 }
 
-/* Custom styles for balance-item to ensure spacing and text color */
-.balance-item .label {
-  font-weight: 500;
-  color: var(--text-color); /* Use CSS variable */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.balance-item .value {
-  font-weight: bold;
-  color: var(--heading-color); /* Use CSS variable */
-  font-size: 1.2em; /* Slightly increased font size */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Responsive adjustments for smaller screens */
-@media (max-width: 575.98px) {
-  .user-switcher {
-    justify-content: center !important; /* Center align on extra small screens */
+.icon-box {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

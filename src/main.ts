@@ -47,6 +47,7 @@ import { LeaveEncashmentComponent } from './components/leave-encashment/leave-en
     .app-container {
       min-height: 100vh;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', sans-serif;
     }
     
     .coming-soon {
@@ -58,28 +59,37 @@ import { LeaveEncashmentComponent } from './components/leave-encashment/leave-en
     }
     
     .coming-soon h2 {
-      font-size: 48px;
+      font-size: 3rem;
       margin-bottom: 20px;
+      font-weight: 700;
     }
     
     .coming-soon p {
-      font-size: 20px;
+      font-size: 1.25rem;
       margin-bottom: 30px;
     }
     
     .btn-back {
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
       color: white;
-      border: 2px solid white;
-      padding: 12px 25px;
-      border-radius: 25px;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 0.75rem 2rem;
+      border-radius: 2rem;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 1rem;
+      font-weight: 500;
       transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     
     .btn-back:hover {
-      background: white;
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
       color: #764ba2;
     }
   `]

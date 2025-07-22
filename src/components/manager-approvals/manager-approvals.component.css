@@ -1,0 +1,32 @@
+/* Custom styles for manager approvals component */
+
+/* Adjust spacing and appearance for tab buttons */
+.nav-tabs .nav-link {
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 0.25rem 0.25rem 0 0; /* Match Bootstrap border-radius */
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--bs-nav-tabs-link-active-bg) !important; /* Use Bootstrap variable for active background */
+  color: var(--bs-nav-tabs-link-active-color) !important; /* Use Bootstrap variable for active color */
+  border-color: var(--bs-nav-tabs-link-active-border-color) !important; /* Use Bootstrap variable for active border */
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+  border-color: transparent !important; /* Prevent border on hover for non-active tabs */
+}
+
+/* Adjust spacing for request card header meta info */
+.request-card .request-meta .badge {
+  font-size: 0.9em;
+}
+
+/* Custom styles for history status badges */
+.history-item .history-status.badge {
+    min-width: 70px; /* Ensure consistent width */
+}

@@ -1,0 +1,33 @@
+.nav-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.nav-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  border-color: #3498db;
+}
+
+.manager-card {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.manager-card .card-title,
+.manager-card .card-text {
+  color: white;
+}
+
+/* Custom styles for balance-item to ensure spacing */
+.balance-item .label {
+  font-weight: 500;
+  color: #555;
+}
+
+.balance-item .value {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 1.1em; /* Adjust font size relative to parent */
+}

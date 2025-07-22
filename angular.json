@@ -32,7 +32,7 @@
             "outputPath": "dist/demo",
             "polyfills": ["zone.js"],
             "scripts": [],
-            "styles": ["src/styles.css", "node_modules/bootstrap/dist/css/bootstrap.min.css"],
+            "styles": ["node_modules/bootstrap/dist/css/bootstrap.min.css"],
             "tsConfig": "tsconfig.app.json"
           }
         },

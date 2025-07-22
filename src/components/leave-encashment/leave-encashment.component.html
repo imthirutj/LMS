@@ -1,136 +1,240 @@
-<div class="container mt-4">
-  <div class="row align-items-center mb-4">
-    <div class="col-md-8">
-      <h2>Leave Encashment</h2>
-    </div>
-    <div class="col-md-4 d-flex justify-content-md-end">
-      <button class="btn btn-secondary" (click)="goBack()">← Back to Dashboard</button>
-    </div>
-  </div>
-
-  <div *ngIf="currentUser" class="encashment-form card p-4 mb-4">
-    <div class="info-section alert alert-info mb-4">
-      <h3 class="alert-heading">Encashment Policy</h3>
-      <div class="policy-info">
-        <ul>
-          <li>Only Earned Leave (EL) and Unpaid Earned Leave (UEL) are eligible for encashment</li>
-          <li>Maximum 15 days can be encashed at once</li>
-          <li>Encashment is processed at basic salary rate per day</li>
-          <li>Minimum balance must be maintained after encashment</li>
-        </ul>
+<div class="container-fluid py-4">
+  <div class="container">
+    <!-- Header -->
+    <div class="row align-items-center mb-5">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold text-white mb-2">
+          <i class="fas fa-money-bill-wave me-3"></i>Leave Encashment
+        </h1>
+        <p class="lead text-white-50">Convert your eligible leaves to cash</p>
       </div>
-    </div>
-
-    <form (ngSubmit)="onSubmit()" #encashmentForm="ngForm">
-      <div class="mb-3">
-        <label for="leaveType" class="form-label">Select Leave Type for Encashment*</label>
-        <select
-          id="leaveType"
-          [(ngModel)]="formData.leaveType"
-          name="leaveType"
-          required
-          (change)="onLeaveTypeChange()"
-          class="form-select">
-          <option value="">Select Leave Type</option>
-          <option value="EL">Earned Leave (EL) - {{currentUser.leaveBalance.el}} days available</option>
-          <option value="UEL">Unpaid Earned Leave (UEL) - {{currentUser.leaveBalance.uel}} days available</option>
-        </select>
-      </div>
-
-      <div *ngIf="formData.leaveType" class="balance-info mb-3">
-        <div class="balance-card card bg-light">
-          <div class="card-body">
-            <h4 class="card-title">Current Balance: {{getCurrentBalance()}} days</h4>
-            <p class="card-text">Maximum encashable: {{maxEncashableDays}} days</p>
-            <p class="card-text">Minimum balance to maintain: {{minBalance}} days</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label for="daysToEncash" class="form-label">Days to Encash*</label>
-        <input
-          type="number"
-          id="daysToEncash"
-          [(ngModel)]="formData.daysToEncash"
-          name="daysToEncash"
-          required
-          [min]="1"
-          [max]="maxEncashableDays"
-          (input)="calculateAmount()"
-          class="form-control"
-          placeholder="Enter number of days">
-      </div>
-
-      <div *ngIf="formData.daysToEncash > 0" class="calculation-section mb-3">
-        <div class="calculation-card card border-warning">
-          <div class="card-body">
-            <h4 class="card-title text-warning">Encashment Calculation</h4>
-            <div class="row">
-              <div class="col"><span>Days to encash:</span></div>
-              <div class="col-auto"><span>{{formData.daysToEncash}}</span></div>
-            </div>
-            <div class="row">
-              <div class="col"><span>Rate per day:</span></div>
-              <div class="col-auto"><span>₹{{dailyRate | number}}</span></div>
-            </div>
-            <hr>
-            <div class="row total font-weight-bold">
-              <div class="col"><span><strong>Total Amount:</strong></span></div>
-              <div class="col-auto"><span><strong>₹{{totalAmount | number}}</strong></span></div>
-            </div>
-            <div class="row">
-              <div class="col"><span>Balance after encashment:</span></div>
-              <div class="col-auto"><span>{{getCurrentBalance() - formData.daysToEncash}} days</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="validationMessage" class="validation-message alert" [ngClass]="{'alert-danger': !canEncash, 'alert-success': canEncash}">
-        {{validationMessage}}
-      </div>
-
-      <div class="form-actions d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-secondary" (click)="resetForm()">Reset</button>
-        <button
-          type="submit"
-          class="btn btn-primary"
-          [disabled]="!encashmentForm.valid || !canEncash">
-          Submit Encashment Request
+      <div class="col-md-4 text-md-end">
+        <button class="btn btn-light btn-lg" (click)="goBack()">
+          <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
         </button>
       </div>
-    </form>
-  </div>
+    </div>
 
-  <div class="encashment-history card p-4">
-    <div class="card-body">
-      <h3 class="card-title">Recent Encashment Requests</h3>
-      <div class="history-table mt-3">
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Leave Type</th>
-                <th>Days</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let request of encashmentHistory">
-                <td>{{request.leaveType}}</td>
-                <td>{{request.daysToEncash}}</td>
-                <td>₹{{request.amount | number}}</td>
-                <td>{{request.appliedDate | date:'dd MMM yyyy'}}</td>
-                <td><span class="status badge" [ngClass]="{'bg-warning': request.status === 'pending', 'bg-success': request.status === 'approved', 'bg-danger': request.status === 'rejected'}">{{request.status | titlecase}}</span></td>
-              </tr>
-              <tr *ngIf="encashmentHistory.length === 0">
-                <td colspan="5" class="text-center text-muted">No encashment requests found</td>
-              </tr>
-            </tbody>
-          </table>
+    <div *ngIf="currentUser" class="fade-in-up">
+      <!-- Policy Information -->
+      <div class="card border-0 shadow-lg mb-4">
+        <div class="card-header bg-info text-white py-4">
+          <h3 class="card-title mb-0">
+            <i class="fas fa-info-circle me-2"></i>Encashment Policy
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="d-flex align-items-start">
+                <i class="fas fa-check-circle text-success me-3 mt-1"></i>
+                <span>Only Earned Leave (EL) and Unpaid Earned Leave (UEL) are eligible for encashment</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-start">
+                <i class="fas fa-check-circle text-success me-3 mt-1"></i>
+                <span>Maximum 15 days can be encashed at once</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-start">
+                <i class="fas fa-check-circle text-success me-3 mt-1"></i>
+                <span>Encashment is processed at basic salary rate per day</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-start">
+                <i class="fas fa-check-circle text-success me-3 mt-1"></i>
+                <span>Minimum balance must be maintained after encashment</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encashment Form -->
+      <div class="card border-0 shadow-xl mb-5">
+        <div class="card-header bg-gradient text-white py-4" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          <h3 class="card-title mb-0">
+            <i class="fas fa-calculator me-2"></i>Encashment Request Form
+          </h3>
+        </div>
+        <div class="card-body p-5">
+          <form (ngSubmit)="onSubmit()" #encashmentForm="ngForm">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-4">
+                  <label for="leaveType" class="form-label">
+                    <i class="fas fa-list me-2 text-primary"></i>Select Leave Type for Encashment*
+                  </label>
+                  <select
+                    id="leaveType"
+                    [(ngModel)]="formData.leaveType"
+                    name="leaveType"
+                    required
+                    (change)="onLeaveTypeChange()"
+                    class="form-select form-select-lg">
+                    <option value="">Select Leave Type</option>
+                    <option value="EL">
+                      <i class="fas fa-umbrella-beach"></i> Earned Leave (EL) - {{currentUser.leaveBalance.el}} days available
+                    </option>
+                    <option value="UEL">
+                      <i class="fas fa-clock"></i> Unpaid Earned Leave (UEL) - {{currentUser.leaveBalance.uel}} days available
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-4">
+                  <label for="daysToEncash" class="form-label">
+                    <i class="fas fa-calendar-day me-2 text-primary"></i>Days to Encash*
+                  </label>
+                  <input
+                    type="number"
+                    id="daysToEncash"
+                    [(ngModel)]="formData.daysToEncash"
+                    name="daysToEncash"
+                    required
+                    [min]="1"
+                    [max]="maxEncashableDays"
+                    (input)="calculateAmount()"
+                    class="form-control form-control-lg"
+                    placeholder="Enter number of days">
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="formData.leaveType" class="card bg-light border-0 mb-4">
+              <div class="card-body p-4">
+                <div class="row text-center">
+                  <div class="col-md-4">
+                    <div class="mb-2">
+                      <i class="fas fa-wallet text-info fs-2"></i>
+                    </div>
+                    <h5 class="text-info">Current Balance</h5>
+                    <h3 class="text-dark">{{getCurrentBalance()}} days</h3>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-2">
+                      <i class="fas fa-coins text-success fs-2"></i>
+                    </div>
+                    <h5 class="text-success">Maximum Encashable</h5>
+                    <h3 class="text-dark">{{maxEncashableDays}} days</h3>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-2">
+                      <i class="fas fa-shield-alt text-warning fs-2"></i>
+                    </div>
+                    <h5 class="text-warning">Minimum Balance</h5>
+                    <h3 class="text-dark">{{minBalance}} days</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="formData.daysToEncash > 0" class="card border-warning mb-4">
+              <div class="card-header bg-warning text-dark py-3">
+                <h4 class="card-title mb-0">
+                  <i class="fas fa-calculator me-2"></i>Encashment Calculation
+                </h4>
+              </div>
+              <div class="card-body p-4">
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                      <span class="fw-medium">Days to encash:</span>
+                      <span class="fw-bold">{{formData.daysToEncash}}</span>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                      <span class="fw-medium">Rate per day:</span>
+                      <span class="fw-bold">₹{{dailyRate | number}}</span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="bg-success bg-opacity-10 p-3 rounded-3 mt-3">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold fs-5 text-success">Total Amount:</span>
+                        <span class="fw-bold fs-4 text-success">₹{{totalAmount | number}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center py-2 text-muted">
+                      <span>Balance after encashment:</span>
+                      <span class="fw-bold">{{getCurrentBalance() - formData.daysToEncash}} days</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="validationMessage" class="alert border-0 mb-4" [ngClass]="{'alert-danger': !canEncash, 'alert-success': canEncash}">
+              <div class="d-flex align-items-center">
+                <i class="fas me-3 fs-4" [ngClass]="{'fa-exclamation-triangle': !canEncash, 'fa-check-circle': canEncash}"></i>
+                <span>{{validationMessage}}</span>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-3">
+              <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="resetForm()">
+                <i class="fas fa-undo me-2"></i>Reset
+              </button>
+              <button
+                type="submit"
+                class="btn btn-success btn-lg px-4"
+                [disabled]="!encashmentForm.valid || !canEncash">
+                <i class="fas fa-paper-plane me-2"></i>Submit Encashment Request
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Encashment History -->
+      <div class="card border-0 shadow-lg">
+        <div class="card-header bg-light py-4">
+          <h3 class="card-title mb-0">
+            <i class="fas fa-history me-2 text-primary"></i>Recent Encashment Requests
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="fas fa-tag me-2"></i>Leave Type</th>
+                  <th><i class="fas fa-calendar-day me-2"></i>Days</th>
+                  <th><i class="fas fa-rupee-sign me-2"></i>Amount</th>
+                  <th><i class="fas fa-calendar me-2"></i>Date</th>
+                  <th><i class="fas fa-info-circle me-2"></i>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let request of encashmentHistory">
+                  <td>
+                    <span class="badge bg-primary">{{request.leaveType}}</span>
+                  </td>
+                  <td class="fw-bold">{{request.daysToEncash}}</td>
+                  <td class="fw-bold text-success">₹{{request.amount | number}}</td>
+                  <td>{{request.appliedDate | date:'dd MMM yyyy'}}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{'bg-warning': request.status === 'pending', 'bg-success': request.status === 'approved', 'bg-danger': request.status === 'rejected'}">
+                      {{request.status | titlecase}}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="encashmentHistory.length === 0">
+                  <td colspan="5" class="text-center text-muted py-4">
+                    <i class="fas fa-inbox fs-1 mb-3 d-block"></i>
+                    No encashment requests found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

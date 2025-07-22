@@ -1,3 +1,6 @@
+/* Import Bootstrap CSS */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
 /* Global Styles for Leave Management System */
 
 * {
@@ -24,9 +27,6 @@ button {
 input, select, textarea {
   font-family: inherit;
 }
-
-/* Import Bootstrap CSS */
-@import '~bootstrap/dist/css/bootstrap.min.css';
 
 /* Add any truly global custom styles here */
 

@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-4">
       <div class="user-switcher d-flex align-items-center justify-content-md-end">
-        <label for="userSelect" class="form-label me-2 mb-0">Switch User: </label>
+        <label for="userSelect" class="form-label me-2 mb-0 text-muted">Switch User: </label>
         <select id="userSelect" (change)="onUserChange($event)" class="form-select form-select-sm">
           <option *ngFor="let emp of employees" [value]="emp.id">
             {{emp.name}} ({{emp.role}})
@@ -15,43 +15,43 @@
     </div>
   </div>
 
-  <div *ngIf="currentUser$ | async as user" class="main-content">
-    <div class="user-info alert alert-info mb-4">
+  <div *ngIf="currentUser$ | async as user">
+    <div class="user-info alert alert-info mb-4 shadow-sm">
       <h2 class="alert-heading">Welcome, {{user.name}}</h2>
       <p class="mb-0">Role: {{user.role | titlecase}} | Service Years: {{user.serviceYears}}</p>
     </div>
 
-    <div class="leave-balance-card card mb-4">
+    <div class="leave-balance-card card mb-4 shadow-sm">
       <div class="card-body">
-        <h3 class="card-title">Leave Balance</h3>
-        <div class="balance-grid row mt-3">
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2">
-              <span class="label">Casual Leave (CL)</span>
+        <h3 class="card-title text-primary">Leave Balance</h3>
+        <div class="balance-grid row mt-3 g-3">
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2 mb-0">
+              <span class="label text-muted">Casual Leave (CL)</span>
               <span class="value fw-bold">{{user.leaveBalance.cl}} days</span>
             </div>
           </div>
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2">
-              <span class="label">Earned Leave (EL)</span>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2 mb-0">
+              <span class="label text-muted">Earned Leave (EL)</span>
               <span class="value fw-bold">{{user.leaveBalance.el}} days</span>
             </div>
           </div>
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2">
-              <span class="label">Medical Leave (ML)</span>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2 mb-0">
+              <span class="label text-muted">Medical Leave (ML)</span>
               <span class="value fw-bold">{{user.leaveBalance.ml}} days</span>
             </div>
           </div>
-          <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
-            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2">
-              <span class="label">Unpaid Earned Leave (UEL)</span>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2 mb-0">
+              <span class="label text-muted">Unpaid Earned Leave (UEL)</span>
               <span class="value fw-bold">{{user.leaveBalance.uel}} days</span>
             </div>
           </div>
-          <div *ngIf="user.gender === 'female' && user.leaveBalance.maternityLeave" class="col-sm-6 col-md-4 col-lg-3 mb-3">
-            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2">
-              <span class="label">Maternity Leave</span>
+          <div *ngIf="user.gender === 'female' && user.leaveBalance.maternityLeave" class="col-sm-6 col-md-4 col-lg-3">
+            <div class="balance-item alert alert-secondary d-flex justify-content-between align-items-center py-2 mb-0">
+              <span class="label text-muted">Maternity Leave</span>
               <span class="value fw-bold">{{user.leaveBalance.maternityLeave}} days</span>
             </div>
           </div>
@@ -59,36 +59,36 @@
       </div>
     </div>
 
-    <div class="navigation-cards row">
-      <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-        <div class="nav-card card h-100" (click)="navigateTo('apply-leave')">
+    <div class="navigation-cards row g-4">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="nav-card card h-100 shadow-sm" (click)="navigateTo('apply-leave')">
           <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
-            <h3 class="card-title">Apply for Leave</h3>
-            <p class="card-text">Submit new leave requests</p>
+            <h3 class="card-title text-primary">Apply for Leave</h3>
+            <p class="card-text text-muted">Submit new leave requests</p>
           </div>
         </div>
       </div>
 
-      <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-        <div class="nav-card card h-100" (click)="navigateTo('leave-history')">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="nav-card card h-100 shadow-sm" (click)="navigateTo('leave-history')">
           <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
-            <h3 class="card-title">Leave History</h3>
-            <p class="card-text">View your leave applications</p>
+            <h3 class="card-title text-primary">Leave History</h3>
+            <p class="card-text text-muted">View your leave applications</p>
           </div>
         </div>
       </div>
 
-      <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-        <div class="nav-card card h-100" (click)="navigateTo('encashment')">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="nav-card card h-100 shadow-sm" (click)="navigateTo('encashment')">
           <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
-            <h3 class="card-title">Leave Encashment</h3>
-            <p class="card-text">Encash eligible leaves</p>
+            <h3 class="card-title text-primary">Leave Encashment</h3>
+            <p class="card-text text-muted">Encash eligible leaves</p>
           </div>
         </div>
       </div>
 
-      <div *ngIf="user.role === 'manager'" class="col-sm-6 col-md-4 col-lg-3 mb-4">
-        <div class="nav-card card h-100 manager-card" (click)="navigateTo('approvals')">
+      <div *ngIf="user.role === 'manager'" class="col-sm-6 col-md-4 col-lg-3">
+        <div class="nav-card card h-100 manager-card shadow-sm" (click)="navigateTo('approvals')">
           <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
             <h3 class="card-title">Pending Approvals</h3>
             <p class="card-text">Review team leave requests</p>

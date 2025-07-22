@@ -1,32 +1,48 @@
+/* Import Bootstrap CSS */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
 /* Global Styles for Leave Management System */
 
-* {
-  box-sizing: border-box;
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --body-bg: #f8f9fa; /* Light background for content */
+  --text-color: #212529;
+  --heading-color: #343a40;
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-color: var(--body-bg); /* Use CSS variable */
+  color: var(--text-color); /* Use CSS variable */
   min-height: 100vh;
+  line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+  color: var(--heading-color); /* Use CSS variable */
   font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
 }
 
-button {
-  font-family: inherit;
+/* Improve link styling */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
 }
 
-input, select, textarea {
-  font-family: inherit;
+a:hover {
+  text-decoration: underline;
 }
 
-/* Add any truly global custom styles here */
-
+/* Basic form element styling (Bootstrap handles most) */
 
 /* Scrollbar Styling */
 ::-webkit-scrollbar {

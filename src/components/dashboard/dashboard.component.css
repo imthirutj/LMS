@@ -1,35 +1,35 @@
 .nav-card {
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 2px solid transparent;
 }
 
 .nav-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-  border-color: #3498db;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important; /* Increased shadow on hover */
+  border-color: var(--primary-color); /* Use CSS variable for border color */
 }
 
 .manager-card {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #a2b2ff 0%, #6371c7 100%); /* Adjusted gradient */
   color: white;
 }
 
 .manager-card .card-title,
 .manager-card .card-text {
-  color: white;
+  color: white !important; /* Ensure text is white */
 }
 
-/* Custom styles for balance-item to ensure spacing */
+/* Custom styles for balance-item to ensure spacing and text color */
 .balance-item .label {
   font-weight: 500;
-  color: #555;
+  color: var(--text-color); /* Use CSS variable */
 }
 
 .balance-item .value {
   font-weight: bold;
-  color: #2c3e50;
-  font-size: 1.1em; /* Adjust font size relative to parent */
+  color: var(--heading-color); /* Use CSS variable */
+  font-size: 1.2em; /* Slightly increased font size */
 }
 
 /* Responsive adjustments for smaller screens */

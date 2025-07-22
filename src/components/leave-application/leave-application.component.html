@@ -1,12 +1,16 @@
-<div class="leave-application-container container mt-4">
-  <div class="header d-flex justify-content-between align-items-center mb-4">
-    <h2>Apply for Leave</h2>
-    <button class="btn btn-secondary" (click)="goBack()">← Back to Dashboard</button>
+<div class="container mt-4">
+  <div class="row align-items-center mb-4">
+    <div class="col-md-8">
+      <h2>Apply for Leave</h2>
+    </div>
+    <div class="col-md-4 d-flex justify-content-md-end">
+      <button class="btn btn-secondary" (click)="goBack()">← Back to Dashboard</button>
+    </div>
   </div>
 
   <div *ngIf="currentUser" class="application-form card p-4 mb-4">
     <form (ngSubmit)="onSubmit()" #leaveForm="ngForm">
-      <div class="form-group mb-3">
+      <div class="mb-3">
         <label for="leaveType" class="form-label">Leave Type*</label>
         <select
           id="leaveType"
@@ -26,9 +30,9 @@
         </select>
       </div>
 
-      <div class="date-group row mb-3">
+      <div class="row mb-3">
         <div class="col-md-6">
-          <div class="form-group">
+          <div class="mb-3">
             <label for="startDate" class="form-label">Start Date*</label>
             <input
               type="date"
@@ -43,7 +47,7 @@
         </div>
 
         <div class="col-md-6">
-          <div class="form-group">
+          <div class="mb-3">
             <label for="endDate" class="form-label">End Date*</label>
             <input
               type="date"
@@ -65,7 +69,7 @@
         </p>
       </div>
 
-      <div class="form-group mb-3">
+      <div class="mb-3">
         <label for="reason" class="form-label">Reason*</label>
         <textarea
           id="reason"
@@ -96,7 +100,7 @@
   <div class="leave-policy-info card p-4">
     <div class="card-body">
       <h3 class="card-title">Leave Policy Information</h3>
-      <div class="policy-grid row mt-3">
+      <div class="row mt-3">
         <div class="col-md-6 mb-3">
           <div class="policy-item card h-100">
             <div class="card-body">

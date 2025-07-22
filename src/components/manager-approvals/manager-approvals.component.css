@@ -30,3 +30,21 @@
 .history-item .history-status.badge {
     min-width: 70px; /* Ensure consistent width */
 }
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767.98px) {
+  .request-card .card-header {
+    flex-direction: column; /* Stack header items on small screens */
+    align-items: flex-start !important;
+  }
+
+  .request-card .request-meta {
+    margin-top: 10px; /* Add space between stacked header items */
+  }
+
+  .history-item {
+    flex-direction: column; /* Stack history items on small screens */
+    align-items: flex-start !important;
+    gap: 5px; /* Add space between stacked history items */
+  }
+}

@@ -1,7 +1,11 @@
-<div class="encashment-container container mt-4">
-  <div class="header d-flex justify-content-between align-items-center mb-4">
-    <h2>Leave Encashment</h2>
-    <button class="btn btn-secondary" (click)="goBack()">← Back to Dashboard</button>
+<div class="container mt-4">
+  <div class="row align-items-center mb-4">
+    <div class="col-md-8">
+      <h2>Leave Encashment</h2>
+    </div>
+    <div class="col-md-4 d-flex justify-content-md-end">
+      <button class="btn btn-secondary" (click)="goBack()">← Back to Dashboard</button>
+    </div>
   </div>
 
   <div *ngIf="currentUser" class="encashment-form card p-4 mb-4">
@@ -18,7 +22,7 @@
     </div>
 
     <form (ngSubmit)="onSubmit()" #encashmentForm="ngForm">
-      <div class="form-group mb-3">
+      <div class="mb-3">
         <label for="leaveType" class="form-label">Select Leave Type for Encashment*</label>
         <select
           id="leaveType"
@@ -43,7 +47,7 @@
         </div>
       </div>
 
-      <div class="form-group mb-3">
+      <div class="mb-3">
         <label for="daysToEncash" class="form-label">Days to Encash*</label>
         <input
           type="number"
@@ -62,22 +66,22 @@
         <div class="calculation-card card border-warning">
           <div class="card-body">
             <h4 class="card-title text-warning">Encashment Calculation</h4>
-            <div class="calc-row d-flex justify-content-between">
-              <span>Days to encash:</span>
-              <span>{{formData.daysToEncash}}</span>
+            <div class="row">
+              <div class="col"><span>Days to encash:</span></div>
+              <div class="col-auto"><span>{{formData.daysToEncash}}</span></div>
             </div>
-            <div class="calc-row d-flex justify-content-between">
-              <span>Rate per day:</span>
-              <span>₹{{dailyRate | number}}</span>
+            <div class="row">
+              <div class="col"><span>Rate per day:</span></div>
+              <div class="col-auto"><span>₹{{dailyRate | number}}</span></div>
             </div>
             <hr>
-            <div class="calc-row total d-flex justify-content-between font-weight-bold">
-              <span><strong>Total Amount:</strong></span>
-              <span><strong>₹{{totalAmount | number}}</strong></span>
+            <div class="row total font-weight-bold">
+              <div class="col"><span><strong>Total Amount:</strong></span></div>
+              <div class="col-auto"><span><strong>₹{{totalAmount | number}}</strong></span></div>
             </div>
-            <div class="calc-row d-flex justify-content-between">
-              <span>Balance after encashment:</span>
-              <span>{{getCurrentBalance() - formData.daysToEncash}} days</span>
+            <div class="row">
+              <div class="col"><span>Balance after encashment:</span></div>
+              <div class="col-auto"><span>{{getCurrentBalance() - formData.daysToEncash}} days</span></div>
             </div>
           </div>
         </div>

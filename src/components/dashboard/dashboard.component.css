@@ -31,3 +31,10 @@
   color: #2c3e50;
   font-size: 1.1em; /* Adjust font size relative to parent */
 }
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 575.98px) {
+  .user-switcher {
+    justify-content: center !important; /* Center align on extra small screens */
+  }
+}

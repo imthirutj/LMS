@@ -1,3 +1,10 @@
 .note {
   font-size: 0.9em;
 }
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767.98px) {
+  .form-actions {
+    flex-direction: column; /* Stack buttons on small screens */
+  }
+}

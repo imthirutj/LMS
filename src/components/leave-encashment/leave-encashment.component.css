@@ -1,14 +1,14 @@
 /* Custom styles for encashment calculation section */
-.calculation-card .calc-row {
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Use Bootstrap's border color */
+.calculation-card .row {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125); /* Use Bootstrap's border color */
+    padding: 8px 0;
 }
 
-.calculation-card .calc-row:last-child {
+.calculation-card .row:last-child {
   border-bottom: none;
 }
 
-.calculation-card .calc-row.total {
+.calculation-card .row.total {
   background: rgba(255, 193, 7, 0.1); /* Use Bootstrap warning color with alpha */
   padding: 12px;
   margin-top: 10px;
@@ -20,4 +20,11 @@
 .history-table .status.badge {
     /* Bootstrap classes handle background and text color */
     min-width: 70px; /* Ensure consistent width */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767.98px) {
+  .form-actions {
+    flex-direction: column; /* Stack buttons on small screens */
+  }
 }

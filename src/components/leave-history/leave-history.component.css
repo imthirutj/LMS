@@ -1,0 +1,156 @@
+.stats-card {
+  transition: all 0.3s ease;
+  border: none !important;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+}
+
+.icon-box {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Table enhancements */
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(102, 126, 234, 0.05);
+  transform: translateX(2px);
+}
+
+/* Modal enhancements */
+.modal.show {
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: 1px solid rgba(0,0,0,0.125);
+}
+
+/* Pagination enhancements */
+.pagination .page-link {
+  border: none;
+  color: #667eea;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  margin: 0 0.125rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #667eea;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #6c757d;
+  background-color: transparent;
+}
+
+/* Filter section enhancements */
+.form-select:focus,
+.form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Badge enhancements */
+.badge {
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border-radius: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 1rem;
+  }
+  
+  .table-responsive {
+    font-size: 0.9rem;
+  }
+  
+  .stats-card .card-body {
+    padding: 1.5rem 1rem;
+  }
+  
+  .icon-box {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+/* Empty state styling */
+.table tbody tr td:only-child {
+  border: none;
+}
+
+/* Status badge specific colors */
+.badge.bg-success {
+  background-color: #10b981 !important;
+}
+
+.badge.bg-warning {
+  background-color: #f59e0b !important;
+}
+
+.badge.bg-danger {
+  background-color: #ef4444 !important;
+}
+
+.badge.bg-info {
+  background-color: #3b82f6 !important;
+}

@@ -43,6 +43,9 @@ export class LeaveHistoryComponent implements OnInit {
   // Available years for filter
   availableYears: number[] = [];
 
+  // Make Math available in template
+  Math = Math;
+
   constructor(private leaveService: LeaveService) {}
 
   ngOnInit() {
